@@ -1,3 +1,5 @@
+[![CI](https://github.com/mukundjaiswal/agentic-rag-assistant-nutrition/actions/workflows/ci.yml/badge.svg)](https://github.com/mukundjaiswal/agentic-rag-assistant-nutrition/actions/workflows/ci.yml)
+
 # Agentic RAG Assistant — Nutrition
 
 A retrieval-augmented assistant built as an explicit **state machine** rather
