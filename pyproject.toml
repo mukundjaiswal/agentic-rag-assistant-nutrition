@@ -1,0 +1,109 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agentic-rag-assistant-nutrition"
+version = "0.1.0"
+description = "A retrieval-augmented nutrition assistant built as an explicit state machine with self-correction under a bounded iteration budget."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Mukund Jaiswal" }]
+keywords = ["rag", "langgraph", "llm", "evaluation", "agents"]
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Typing :: Typed",
+]
+
+dependencies = [
+    # Shared evaluation harness, also used by my classification and
+    # summarization projects. Install it first: either from git, or with
+    # `pip install -e ../eval-harness` when working on both side by side.
+    "eval-harness>=0.1.0,<0.2",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.3",
+    "typer>=0.12",
+]
+
+[project.optional-dependencies]
+rag = [
+    "langgraph>=0.2",
+    "langchain>=0.2",
+    "langchain-community>=0.2",
+    "langchain-openai>=0.1",
+    "langchain-experimental>=0.0.60",
+    "chromadb>=0.5",
+    "llama-parse>=0.4",
+]
+ui = ["streamlit>=1.35"]
+dev = [
+    "pytest>=8.2",
+    "pytest-cov>=5.0",
+    "mypy>=1.10",
+    "ruff>=0.6",
+    "pre-commit>=3.7",
+]
+
+[project.scripts]
+agentic-rag = "agentic_rag.cli:app"
+
+[project.urls]
+Repository = "https://github.com/mukundjaiswal/agentic-rag-assistant-nutrition"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agentic_rag"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers --strict-config"
+markers = [
+    "integration: exercises the compiled graph; requires the 'rag' extra",
+]
+
+[tool.coverage.run]
+source = ["agentic_rag"]
+branch = true
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "UP", "B", "BLE", "SIM", "RUF", "ANN", "D"]
+ignore = ["D100", "D104", "ANN401"]
+
+[tool.ruff.lint.isort]
+# Pinned rather than inferred: eval-harness may be installed editable from a
+# sibling directory, which import detection would otherwise read as local.
+known-first-party = ["agentic_rag"]
+known-third-party = ["eval_harness"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["D", "ANN"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.mypy]
+python_version = "3.11"
+packages = ["agentic_rag"]
+mypy_path = "src"
+strict = true
+warn_unreachable = true
+disallow_untyped_defs = true
+no_implicit_reexport = true
+
+[[tool.mypy.overrides]]
+module = [
+    "langgraph.*",
+    "langchain.*",
+    "langchain_community.*",
+    "langchain_openai.*",
+    "langchain_experimental.*",
+    "llama_parse.*",
+    "streamlit.*",
+]
+ignore_missing_imports = true

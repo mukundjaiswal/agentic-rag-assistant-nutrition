@@ -1,0 +1,46 @@
+# Secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Corpus, indexes and run artifacts
+data/
+.chroma/
+chroma/
+evaluation/results/
+*.sqlite3
+
+# Model weights and caches. Never in git: a single checkpoint outruns GitHub's
+# 100MB file limit, and removing one from history afterwards means a rewrite.
+models/
+*.gguf
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.onnx
+.cache/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
